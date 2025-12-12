@@ -1,0 +1,39 @@
+# FM24 実名化ツール 設定ファイル
+# デフォルト設定ファイル: ~/.config/fm24-real/config.yaml
+
+# FM24インストールパス設定
+install_paths:
+  # Windows Steam版
+  - name: windows-steam
+    path: C:\Program Files (x86)\Steam\steamapps\common\Football Manager 2024\data\database\db
+    platform: windows
+    description: Windows Steam版
+
+  # Windows Epic Games版
+  - name: windows-epic
+    path: C:\Program Files\Epic Games\Football Manager 2024\data\database\db
+    platform: windows
+    description: Windows Epic Games版
+
+  # macOS Steam版
+  - name: macos-steam
+    path: ~/Library/Application Support/Steam/steamapps/common/Football Manager 2024/data/database/db
+    platform: darwin
+    description: macOS Steam版
+
+  # macOS App Store版
+  - name: macos-appstore
+    path: ~/Library/Application Support/Sports Interactive/Football Manager 2024/data/database/db
+    platform: darwin
+    description: macOS App Store版
+
+  # カスタムパス例（必要に応じて追加）
+  # - name: custom-install
+  #   path: /path/to/your/fm24/data/database/db
+  #   platform: darwin  # または windows
+  #   description: カスタムインストール
+
+# バックアップ設定
+backup:
+  enabled: true
+  directory: ~/FM24_Backup  # バックアップ先ディレクトリ
