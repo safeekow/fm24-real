@@ -65,22 +65,52 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download all artifacts
+      - name: Download macOS Intel artifact
         uses: actions/download-artifact@v4
         with:
+          name: fm24-real-darwin-amd64
           path: dist
+
+      - name: Download macOS ARM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: fm24-real-darwin-arm64
+          path: dist
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: fm24-real-windows-amd64.exe
+          path: dist
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release
+          # 再帰的にファイルを検索してコピー
+          find dist -name "fm24-real-*" -type f -exec cp {} release/ \;
+          # ファイルが見つからない場合の確認
+          echo "Files in release directory:"
+          ls -la release/ || echo "Warning: No files in release directory"
+          if [ ! -f "release/fm24-real-darwin-amd64" ] && [ ! -f "release/fm24-real-darwin-arm64" ] && [ ! -f "release/fm24-real-windows-amd64.exe" ]; then
+            echo "Error: No release files found!"
+            find . -name "fm24-real-*" -type f || echo "No fm24-real files found anywhere"
+            exit 1
+          fi
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/*
+          files: release/*
           draft: false
           prerelease: false
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
